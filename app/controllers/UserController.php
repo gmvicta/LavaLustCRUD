@@ -1,15 +1,18 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') or exit('No direct script access allowed');
 
-class user_control extends Controller
+class UserController extends Controller
 {
+    //=== READ ===//
     public function read()
     {
-        $data['user'] = $this->user_model->read();
+        $data['user'] = $this->UserModel->read();
         $this->call->view('user/read', $data);
 
         $this->call->view('user/read');
     }
+
+    //=== CREATE ===//
     public function create()
     {
         if ($this->form_validation->submitted()) {
@@ -20,7 +23,7 @@ class user_control extends Controller
             $gender = $this->io->post('gender');
             $address = $this->io->post('address');
 
-            if ($this->user_model->create($lastname, $firstname, $email, $gender, $address)) {
+            if ($this->UserModel->create($lastname, $firstname, $email, $gender, $address)) {
                 redirect('user/read');
             } else {
                 redirect('user/read');
@@ -29,6 +32,8 @@ class user_control extends Controller
 
         $this->call->view('user/create');
     }
+
+    //=== UPDATE ===//
     public function update($id)
     {
         if ($this->form_validation->submitted()) {
@@ -39,19 +44,20 @@ class user_control extends Controller
             $gender = $this->io->post('gender');
             $address = $this->io->post('address');
 
-            if ($this->user_model->update($lastname, $firstname, $email, $gender, $address, $id)) {
+            if ($this->UserModel->update($lastname, $firstname, $email, $gender, $address, $id)) {
                 redirect('user/read');
             } else {
                 redirect('user/read');
             }
         }
-        $data['user'] = $this->user_model->get1($id);
+        $data['user'] = $this->UserModel->get1($id);
         $this->call->view('user/update', $data);
     }
 
+    //=== DELETE ===//
     public function delete($id)
     {
-        if ($this->user_model->delete($id)) {
+        if ($this->UserModel->delete($id)) {
             redirect('user/read');
         } else {
             redirect('user/read');
